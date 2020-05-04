@@ -20,7 +20,7 @@ The program is still quite bare bones. Still, using it is quite simple. To add a
 Including:
 
 + [ ] React immediately on terminal resize (and adapt accordingly).
-+ [ ] Implement the ability to type just `add <something>` to add something (same for remove).
++ [ ] Implement the ability to just type `add <something>` to add something (same for remove).
 + [ ] Clean up bits of code.
 + [ ] Add some nice colors (?).
 + [ ] Add some pictures to the repo for showcase.
