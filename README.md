@@ -15,7 +15,7 @@ Nothing really, except the following:
 
 Including:
 
-+ [  ] React immediately on terminal resize (and adapt accordingly)
-+ [  ] Implement the ability to type just `add <something>` to add something (same for remove)
-+ [  ] Add some nice colors (?)
++ [ ] React immediately on terminal resize (and adapt accordingly)
++ [ ] Implement the ability to type just `add <something>` to add something (same for remove)
++ [ ] Add some nice colors (?)
 
