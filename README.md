@@ -17,6 +17,6 @@ Including:
 
 + [ ] React immediately on terminal resize (and adapt accordingly).
 + [ ] Implement the ability to type just `add <something>` to add something (same for remove).
-+ [ ] Clean up some bits of code.
++ [ ] Clean up bits of code.
 + [ ] Add some nice colors (?)
 
