@@ -21,7 +21,7 @@ Including:
 
 + [ ] React immediately on terminal resize (and adapt accordingly).
 + [ ] Implement the ability to just type `add <something>` to add something (same for remove).
-+ [ ] Wrap lines when to keep text centered.
++ [ ] Wrap lines to keep text centered.
 + [ ] Clean up bits of code.
 + [ ] Add some nice colors (?).
 + [ ] Add some pictures to the repo for showcase.
