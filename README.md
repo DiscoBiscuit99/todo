@@ -1,6 +1,6 @@
 # Terminal based todo app written in Rust
 
-Just a minimal todo app quickly thrown together using the language Rust and the crates [termion](https://github.com/redox-os/termion) and [term_cursor](https://github.com/Lisoph/term_cursor).
+Just a minimal todo app (still under 200 lines) quickly thrown together using the language Rust and the crates [termion](https://github.com/redox-os/termion) and [term_cursor](https://github.com/Lisoph/term_cursor).
 
 It isn't done yet, but most of the functionality is implemented. 
 
