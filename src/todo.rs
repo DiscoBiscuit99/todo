@@ -28,9 +28,11 @@ impl Todo {
         todo.list = Todo::read_saved_list();
 
         if term_width <= 105 {
-            todo.x = term_width / 5;
-        } else if term_width <= 140 {
+            todo.x = term_width / 3;
+        } else if term_width <= 145 {
             todo.x = term_width / 4;
+        } else if term_width <= 185 {
+            todo.x = term_width / 5;
         }
 
         todo
@@ -38,7 +40,9 @@ impl Todo {
 
     pub fn get_input(&mut self) {
         // Print the prompt.
-        print!("{}> ", termion::cursor::Goto(self.x, self.y_start + self.list.len() as u16 + 3));
+        print!("{}> ", 
+            termion::cursor::Goto(self.x, 
+                self.y_start + self.list.len() as u16 + 3));
 
         // Get user input.
         let _ = io::stdout().flush();
@@ -49,17 +53,19 @@ impl Todo {
     pub fn handle_input(&mut self) {
         // Match the input against valid arguments.
         match &self.input.as_str()[..self.input.as_str().len()-1] { // Exclude the newline.
-            "quit" | "exit" => self.exit(),
-            "add"           => self.add(),
-            "remove"        => self.remove(),
-            _               => (),
+            "quit" | "q" | "exit" => self.exit(),
+            "add" =>                 self.add(),
+            "remove" =>              self.remove(),
+            _ =>                     (),
         }
 
         self.input = String::new();
     }
 
     pub fn add(&mut self) {
-        print!("{}Add item: ", termion::cursor::Goto(self.x, self.y_start + self.list.len() as u16 + 3));
+        print!("{}Add item: ", 
+            termion::cursor::Goto(self.x, 
+                self.y_start + self.list.len() as u16 + 3));
 
         let mut tmp_input = String::new();
 
@@ -67,13 +73,16 @@ impl Todo {
         io::stdin().read_line(&mut tmp_input)
             .expect("Failed to read user input");
 
-        tmp_input = String::from(&tmp_input.as_str()[..&tmp_input.as_str().len()-1]);
+        tmp_input = 
+            String::from(&tmp_input.as_str()[..&tmp_input.as_str().len()-1]);
 
         self.list.push(tmp_input);
     }
 
     pub fn remove(&mut self) {
-        print!("{}Remove item: ", termion::cursor::Goto(self.x, self.y_start + self.list.len() as u16 + 3));
+        print!("{}Remove item: ", 
+            termion::cursor::Goto(self.x, 
+                self.y_start + self.list.len() as u16 + 3));
 
         let mut tmp_input = String::new();
 
@@ -81,7 +90,8 @@ impl Todo {
         io::stdin().read_line(&mut tmp_input)
             .expect("Failed to read user input");
 
-        tmp_input = String::from(&tmp_input.as_str()[..&tmp_input.as_str().len()-1]);
+        tmp_input = 
+            String::from(&tmp_input.as_str()[..&tmp_input.as_str().len()-1]);
 
         let index = tmp_input.parse::<usize>();
         let index = match index {
@@ -96,20 +106,30 @@ impl Todo {
         }
     }
 
-    pub fn print_list(&self) {
+    pub fn print_list(&mut self) {
         print!("{}{}{}TODO{}\n",
             termion::clear::All,
-            termion::cursor::Goto(self.term_size.0 / 2 - 1, self.term_size.1 / 5),
+            termion::cursor::Goto(
+                self.term_size.0 / 2 - 1, 
+                self.term_size.1 / 5),
             termion::style::Bold,
             termion::style::Reset);
 
+        let mut y_pos = term_cursor::get_pos().unwrap().1 as u16 + 1;
 
         // Print items.
-        for (i, item) in self.list.iter().enumerate() {
+        for (i, mut item) in self.list.iter().enumerate() {
+            // Align after the first digit.
+            if (i + 1) % 10 == 0 {
+                self.x -= 1;
+            }
+
             print!("{}{}   {}",
-                termion::cursor::Goto(self.x, term_cursor::get_pos().unwrap().1 as u16 + 1 as u16),
+                termion::cursor::Goto(self.x, y_pos),
                 i + 1,
                 item);
+
+            y_pos += 1;
         }
         println!(""); // Print an extra line.
     }
@@ -120,11 +140,11 @@ impl Todo {
         let term_width = self.term_size.0;
 
         if term_width <= 105 {
-            self.x = term_width / 5;
-        } else if term_width <= 140 {
+            self.x = term_width / 3;
+        } else if term_width <= 145 {
             self.x = term_width / 4;
-        } else {
-            self.x = (term_width as f32 / 2.75) as u16;
+        } else if term_width <= 185 {
+            self.x = term_width / 5;
         }
     }
 
@@ -143,14 +163,14 @@ impl Todo {
     fn save_list(&self) {
         let _ = File::create("todo_list");
 
-        let mut save_file = OpenOptions::new()
+        let save_file = OpenOptions::new()
             .write(true)
             .append(true)
             .open("todo_list")
             .unwrap();
         
         for item in &self.list {
-            writeln!(save_file, "{}", item);
+            writeln!(&save_file, "{}", item).expect("Failed to save todo list");
         }
     }
 
@@ -158,11 +178,14 @@ impl Todo {
         let mut todo_list: Vec<String> = vec![];
 
         // If the save file exists, read it and return a vector of strings.
-        if Path::new("/etc/hosts").exists() {
+        if Path::new("todo_list").exists() {
             let save_file_contents = std::fs::read_to_string("todo_list")
-                .expect("Failed to read save file (todo_list)");
+                .expect("Failed to read savefile (todo_list)");
 
-            let mut tmp_list: Vec<String> = save_file_contents.as_str().split("\n").map(|s| s.to_string()).collect();
+            let mut tmp_list: Vec<String> = 
+                save_file_contents.as_str()
+                    .split("\n").map(|s| s.to_string())
+                    .collect();
 
             tmp_list.remove(tmp_list.len()-1);
 
