@@ -118,7 +118,7 @@ impl Todo {
         let mut y_pos = term_cursor::get_pos().unwrap().1 as u16 + 1;
 
         // Print items.
-        for (i, mut item) in self.list.iter().enumerate() {
+        for (i, item) in self.list.iter().enumerate() {
             // Align after the first digit.
             if (i + 1) % 10 == 0 {
                 self.x -= 1;
